@@ -65,6 +65,19 @@ int	ft_len(int nb)
 	return (len);
 }
 
+void ft_hex(unsigned long long int n)
+{
+	if (n >= 16)
+	{
+		ft_hex(n / 16);
+		n %= 16;
+	}
+	if (n > 9 && n < 16)
+		ft_putchar_fd((n % 10) + 97);
+	else
+		ft_putchar_fd(n + 48);
+}
+
 int ft_printf(const char *str, ...)
 {
 	va_list ap;
@@ -82,11 +95,17 @@ int ft_printf(const char *str, ...)
 		}
 		else if (*p == 's')
 		{
-			//for(char *sval = va_arg(ap, char *); *sval; sval++)
-			//	putchar(*sval);
 			char *sval;
 			sval = va_arg(ap, char *);
 			ft_putstr_fd(sval);
+		}
+		else if (*p == 'p')
+		{
+			void *pval;
+			pval = va_arg(ap, void *);
+			ft_putchar_fd('0');
+			ft_putchar_fd('x');
+			ft_hex(pval);
 		}
 		else if (*p == 'd')
 		{
@@ -110,21 +129,10 @@ int ft_printf(const char *str, ...)
 	return (0);
 }
 
-float avergae(int num, ...)
-{
-	int total = 0;
-	va_list ap;
-	va_start(ap, num);
-	for (int i = 0; i < num; i++)
-		total += va_arg(ap, int);
-	va_end(ap);
-	return (float)total / num;
-}
-
-
 int main()
 {
-	ft_printf("%c %s %d", 'z', "hello", 16);
-	printf("%c %d %f %s \n", 'z', 11, 12.12f, "Hello", 200);
+	ft_printf("%p\n", 50);
+	int ans = printf("%c", '5');
+	printf("\n%d", ans);
 	return (0);
 }
